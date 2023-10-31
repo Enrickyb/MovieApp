@@ -42,6 +42,9 @@ public class MovieRepository {
     public LiveData<List<MovieModel>> getAction(){
         return movieApiClient.getMoviesAct();
     }
+    public LiveData<List<MovieModel>> getTrending(){
+        return movieApiClient.getTrend();
+    }
 
 
     public void searchMovieApi(String query, int pageNumber){
@@ -68,6 +71,11 @@ public class MovieRepository {
         movieApiClient.searchMovieApiAct(pageNumber);
     }
 
+    public void searchTrend(int pageNumber){
+        mPageNumber = pageNumber;
+        movieApiClient.searchMovieApiTrend(pageNumber);
+    }
+
     public void searchNextPage(){
         searchMovieApi(mQuery, mPageNumber + 1);
 
@@ -88,6 +96,10 @@ public class MovieRepository {
 
     }
 
+    public void searchNextPageTrend(){
+        searchTrend(mPageNumber + 1);
+
+    }
 
 
 

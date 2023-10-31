@@ -42,5 +42,11 @@ public interface MovieApi {
             @Query("page") int page
     );
 
+    @GET("3/trending/all/day")
+    Call<MovieSearchResponse> getTrending(
+            @Query("api_key") String key,
+            @Query("page") int page
+    );
+
 
 }

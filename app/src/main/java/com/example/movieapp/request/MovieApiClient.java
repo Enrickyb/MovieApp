@@ -38,6 +38,11 @@ public class MovieApiClient {
     private MutableLiveData<List<MovieModel>> mMoviesAct;
     private RetrieveMoviesRunnableAct retrieveMoviesRunnableAct;
 
+    //trending live data
+    private MutableLiveData<List<MovieModel>> mTrend;
+    private RetrieveTrendingRunnableTrend retrieveTrendingRunnableTrend;
+
+
 
 
 
@@ -53,6 +58,7 @@ public class MovieApiClient {
         mMoviesPop = new MutableLiveData<>();
         mMoviesTop = new MutableLiveData<>();
         mMoviesAct = new MutableLiveData<>();
+        mTrend = new MutableLiveData<>();
     }
 
 
@@ -71,6 +77,10 @@ public class MovieApiClient {
 
     public LiveData<List<MovieModel>> getMoviesAct(){
         return mMoviesAct;
+    }
+
+    public LiveData<List<MovieModel>> getTrend(){
+        return mTrend;
     }
 
     public void searchMovieApi(String query, int pageNumber){
@@ -152,6 +162,24 @@ public class MovieApiClient {
             }
         }, 1000, TimeUnit.MILLISECONDS);
 
+    }
+
+    public void searchMovieApiTrend(int pageNumber){
+        if(retrieveTrendingRunnableTrend != null){
+            retrieveTrendingRunnableTrend = null;
+        }
+
+        retrieveTrendingRunnableTrend = new RetrieveTrendingRunnableTrend(pageNumber);
+        final Future myHandler5 = AppExecutors.getInstance().networkIO().submit(retrieveTrendingRunnableTrend);
+
+        AppExecutors.getInstance().networkIO().schedule(new Runnable() {
+            @Override
+            public void run() {
+                // let the user know its timed out
+                myHandler5.cancel(true);
+
+            }
+        }, 1000, TimeUnit.MILLISECONDS);
     }
 
 
@@ -384,6 +412,66 @@ public class MovieApiClient {
             return Servicey.getMovieApi().getAction(
                     Credentials.API_KEY,
                     28,
+                    pageNumber
+            );
+        }
+
+        private void cancelRequest(){
+            Log.v("Tag", "Cancelling Search Request");
+            cancelRequest = true;
+        }
+    }
+
+    private class RetrieveTrendingRunnableTrend implements Runnable{
+
+
+        private int pageNumber;
+        boolean cancelRequest;
+
+        public RetrieveTrendingRunnableTrend(int pageNumber) {
+
+            this.pageNumber = pageNumber;
+            cancelRequest = false;
+        }
+
+        @Override
+        public void run() {
+
+            try{
+                Response response5 = getTrend(pageNumber).execute();
+                if(cancelRequest){
+                    return;
+                }
+
+                if(response5.code() == 200){
+                    List<MovieModel> list = new ArrayList<>(((MovieSearchResponse)response5.body()).getMovies());
+                    if(pageNumber == 1){
+                        mTrend.postValue(list);
+                    }
+                    else{
+                        List<MovieModel> currentMovies = mTrend.getValue();
+                        currentMovies.addAll(list);
+                        mTrend.postValue(currentMovies);
+                    }
+                }
+                else{
+                    String error = response5.errorBody().string();
+                    Log.v("Tag", "Error: " + error);
+                    mTrend.postValue(null);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                mTrend.postValue(null);
+            }
+
+
+            if(cancelRequest){
+                return;
+            }
+        }
+        private Call<MovieSearchResponse> getTrend(int pageNumber){
+            return Servicey.getMovieApi().getTrending(
+                    Credentials.API_KEY,
                     pageNumber
             );
         }

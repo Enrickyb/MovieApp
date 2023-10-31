@@ -32,6 +32,10 @@ public class MovieListViewModel extends ViewModel {
         return movieRepository.getAction();
     }
 
+    public LiveData<List<MovieModel>> getTrend(){
+        return movieRepository.getTrending();
+    }
+
     public void searchMovieApi(String query, int pageNumber){
         movieRepository.searchMovieApi(query, pageNumber);
     }
@@ -44,6 +48,10 @@ public class MovieListViewModel extends ViewModel {
 
     public void searchMovieApiAction(int pageNumber){
         movieRepository.searchMovieAct(pageNumber);
+    }
+
+    public void searchMovieApiTrend(int pageNumber){
+        movieRepository.searchTrend(pageNumber);
     }
 
     public void searchNextPage(){
@@ -60,6 +68,10 @@ public class MovieListViewModel extends ViewModel {
 
     public void searchNextPageAct(){
         movieRepository.searchNextPageAct();
+    }
+
+    public void searchNextPageTrend(){
+        movieRepository.searchNextPageTrend();
     }
 
 
