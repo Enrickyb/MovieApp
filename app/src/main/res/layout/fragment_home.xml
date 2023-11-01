@@ -4,20 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black"
     tools:context=".fragments.HomeFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/black">
 
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,19 +27,74 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    >
+                    <ImageView
+                    android:id="@+id/imageView_highlight"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/shadow"
+                    android:src="@drawable/ic_launcher_background"
+                    app:tint="#86000000"
+                    app:tintMode="src_over"
+
+                    android:layout_height="360dp"
+                    android:scaleType="centerCrop"
+                     />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DESTAQUE DA SEMANA"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="190dp"
+                        android:layout_marginLeft="40dp"
+                        />
+                    <TextView
+                        android:id="@+id/textView_title_highlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Title"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="200dp"
+                        android:layout_marginLeft="40dp"
+                         />
+                </androidx.cardview.widget.CardView>
+
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
                 android:text="Series and Movies Trending"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -62,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Popular Movies"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -86,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Top Rated Movies"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -108,7 +163,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Action Movies"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
