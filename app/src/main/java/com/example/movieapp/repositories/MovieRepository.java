@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.movieapp.models.MovieModel;
 import com.example.movieapp.request.MovieApiClient;
+import com.example.movieapp.response.MovieSearchResponse;
 
 import java.util.List;
 

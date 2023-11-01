@@ -164,23 +164,21 @@ public class MovieApiClient {
 
     }
 
-    public void searchMovieApiTrend(int pageNumber){
-        if(retrieveTrendingRunnableTrend != null){
+    public void searchMovieApiTrend(int pageNumber) {
+        if (retrieveTrendingRunnableTrend != null) {
             retrieveTrendingRunnableTrend = null;
         }
-
         retrieveTrendingRunnableTrend = new RetrieveTrendingRunnableTrend(pageNumber);
-        final Future myHandler5 = AppExecutors.getInstance().networkIO().submit(retrieveTrendingRunnableTrend);
+        AppExecutors.getInstance().networkIO().submit(retrieveTrendingRunnableTrend);
 
         AppExecutors.getInstance().networkIO().schedule(new Runnable() {
             @Override
             public void run() {
-                // let the user know its timed out
-                myHandler5.cancel(true);
-
+                retrieveTrendingRunnableTrend.cancelRequest();
             }
         }, 1000, TimeUnit.MILLISECONDS);
     }
+
 
 
     private class RetrieveMoviesRunnable implements Runnable{
@@ -422,40 +420,36 @@ public class MovieApiClient {
         }
     }
 
-    private class RetrieveTrendingRunnableTrend implements Runnable{
-
+    public class RetrieveTrendingRunnableTrend implements Runnable {
 
         private int pageNumber;
-        boolean cancelRequest;
+        private boolean cancelRequest;
+        private List<MovieModel> trendResult;
 
         public RetrieveTrendingRunnableTrend(int pageNumber) {
-
             this.pageNumber = pageNumber;
             cancelRequest = false;
         }
 
         @Override
         public void run() {
-
-            try{
-                Response response5 = getTrend(pageNumber).execute();
-                if(cancelRequest){
+            try {
+                Response<MovieSearchResponse> response = getTrend(pageNumber).execute();
+                if (cancelRequest) {
                     return;
                 }
 
-                if(response5.code() == 200){
-                    List<MovieModel> list = new ArrayList<>(((MovieSearchResponse)response5.body()).getMovies());
-                    if(pageNumber == 1){
-                        mTrend.postValue(list);
-                    }
-                    else{
+                if (response.code() == 200) {
+                    trendResult = new ArrayList<>(response.body().getMovies());
+                    if (pageNumber == 1) {
+                        mTrend.postValue(trendResult);
+                    } else {
                         List<MovieModel> currentMovies = mTrend.getValue();
-                        currentMovies.addAll(list);
+                        currentMovies.addAll(trendResult);
                         mTrend.postValue(currentMovies);
                     }
-                }
-                else{
-                    String error = response5.errorBody().string();
+                } else {
+                    String error = response.errorBody().string();
                     Log.v("Tag", "Error: " + error);
                     mTrend.postValue(null);
                 }
@@ -464,23 +458,28 @@ public class MovieApiClient {
                 mTrend.postValue(null);
             }
 
-
-            if(cancelRequest){
+            if (cancelRequest) {
                 return;
             }
         }
-        private Call<MovieSearchResponse> getTrend(int pageNumber){
+
+        private Call<MovieSearchResponse> getTrend(int pageNumber) {
             return Servicey.getMovieApi().getTrending(
                     Credentials.API_KEY,
                     pageNumber
             );
         }
 
-        private void cancelRequest(){
+        public void cancelRequest() {
             Log.v("Tag", "Cancelling Search Request");
             cancelRequest = true;
         }
+
+        public List<MovieModel> getTrendResult() {
+            return trendResult;
+        }
     }
+
 
 
 }

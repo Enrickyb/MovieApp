@@ -11,6 +11,7 @@ public class MovieModel implements Parcelable {
     private int movie_id;
     private String title;
     private String poster_path;
+    private String backdrop_path;
     private String release_date;
 
     private float vote_average;
@@ -21,10 +22,11 @@ public class MovieModel implements Parcelable {
     private String original_language;
 
 
-    public MovieModel(int movie_id, String title, String poster_path, String release_date, float vote_average, String movie_overview, String original_language) {
+    public MovieModel(int movie_id, String title, String poster_path, String backdrop_path, String release_date, float vote_average, String movie_overview, String original_language) {
         this.movie_id = movie_id;
         this.title = title;
         this.poster_path = poster_path;
+        this.backdrop_path = backdrop_path;
         this.release_date = release_date;
         this.vote_average = vote_average;
         this.movie_overview = movie_overview;
@@ -34,6 +36,7 @@ public class MovieModel implements Parcelable {
     protected MovieModel(Parcel in) {
         title = in.readString();
         poster_path = in.readString();
+        backdrop_path = in.readString();
         release_date = in.readString();
         movie_id = in.readInt();
         vote_average = in.readFloat();
@@ -45,6 +48,7 @@ public class MovieModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
         dest.writeString(poster_path);
+        dest.writeString(backdrop_path);
         dest.writeString(release_date);
         dest.writeInt(movie_id);
         dest.writeFloat(vote_average);
@@ -77,6 +81,10 @@ public class MovieModel implements Parcelable {
         return poster_path;
     }
 
+    public String getBackdrop_path() {
+        return backdrop_path;
+    }
+
     public String getRelease_date() {
         return release_date;
     }
@@ -102,6 +110,7 @@ public class MovieModel implements Parcelable {
         return "MovieModel{" +
                 "title='" + title + '\'' +
                 ", poster_path='" + poster_path + '\'' +
+                ", backdrop_path='" + backdrop_path + '\'' +
                 ", release_date='" + release_date + '\'' +
                 ", movie_id=" + movie_id +
                 ", vote_average=" + vote_average +

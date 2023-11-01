@@ -12,6 +12,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     ImageView imageView22;
 
+
     OnMovieListener onMovieListener;
 
 

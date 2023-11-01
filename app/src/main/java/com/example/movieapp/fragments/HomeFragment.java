@@ -1,10 +1,12 @@
 package com.example.movieapp.fragments;
 
 import android.content.Intent;
+import android.graphics.Movie;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,18 +16,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.movieapp.MovieDetailsActivity;
 import com.example.movieapp.R;
 import com.example.movieapp.adapters.MovieRecycleView;
 import com.example.movieapp.adapters.OnMovieListener;
 import com.example.movieapp.models.MovieModel;
+import com.example.movieapp.request.MovieApiClient;
+import com.example.movieapp.response.MovieSearchResponse;
 import com.example.movieapp.viewmodels.MovieListViewModel;
 
 import java.util.List;
+import java.util.Random;
 
 
 public class HomeFragment extends Fragment implements OnMovieListener {
+
+    ImageView imageView_highlight;
+    TextView textView_title_highlight;
 
 
 
@@ -51,6 +62,8 @@ public class HomeFragment extends Fragment implements OnMovieListener {
 
     private MovieRecycleView movieRecycleViewAdapter_trend;
 
+    private MovieApiClient.RetrieveTrendingRunnableTrend retrieveTrendingRunnableTrend;
+
 
 
 
@@ -71,10 +84,14 @@ public class HomeFragment extends Fragment implements OnMovieListener {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
+        imageView_highlight = view.findViewById(R.id.imageView_highlight);
+        textView_title_highlight = view.findViewById(R.id.textView_title_highlight);
+
         recyclerView_trend = view.findViewById(R.id.recyclerView_trend);
         recyclerView_popular = view.findViewById(R.id.recyclerView_popular);
         recyclerView_topRated = view.findViewById(R.id.recyclerView_topRated);
         recyclerView_action = view.findViewById(R.id.recyclerView_action);
+
 
 
         movieListViewModel = new ViewModelProvider(this).get(MovieListViewModel.class);
@@ -88,11 +105,12 @@ public class HomeFragment extends Fragment implements OnMovieListener {
         ObserveTopRatedMovies();
         ObserveActionMovies();
 
-
         movieListViewModel.searchMovieApiTrend(1);
         movieListViewModel.searchMovieApiPop(1);
         movieListViewModel.searchMovieApiTop(1);
         movieListViewModel.searchMovieApiAction(1);
+
+
 
 
         return view;
@@ -107,8 +125,19 @@ public class HomeFragment extends Fragment implements OnMovieListener {
                     for(MovieModel movieModel: movieModels){
                         // Get the data in log
                         Log.v("trend", "onChanged: " + movieModel.getTitle());
-
                     }
+
+
+                    MovieModel randomMovie = movieModels.get(0);
+
+                    String imageUrl = "https://image.tmdb.org/t/p/w500" + randomMovie.getBackdrop_path();
+                    Glide.with(getContext())
+                            .load(imageUrl)
+                            .into(imageView_highlight);
+
+
+                    textView_title_highlight.setText(randomMovie.getTitle());
+
                     movieRecycleViewAdapter_trend.setmMovies(movieModels);
                 }
 
@@ -126,11 +155,9 @@ public class HomeFragment extends Fragment implements OnMovieListener {
                     for(MovieModel movieModel: movieModels){
                         // Get the data in log
                         Log.v("Tag", "onChanged: " + movieModel.getTitle());
-
                     }
                     movieRecycleViewAdapter_popular.setmMovies(movieModels);
                 }
-
             }
         } );
 
@@ -144,11 +171,9 @@ public class HomeFragment extends Fragment implements OnMovieListener {
                     for(MovieModel movieModel: movieModels){
                         // Get the data in log
                         Log.v("Tag", "onChanged: " + movieModel.getTitle());
-
                     }
                     movieRecycleViewAdapter_topRated.setmMovies(movieModels);
                 }
-
             }
         } );
     }
@@ -162,11 +187,9 @@ public class HomeFragment extends Fragment implements OnMovieListener {
                     for(MovieModel movieModel: movieModels){
                         // Get the data in log
                         Log.v("Tag", "onChanged: " + movieModel.getTitle());
-
                     }
                     movieRecycleViewAdapter_action.setmMovies(movieModels);
                 }
-
             }
         } );
 
@@ -246,16 +269,11 @@ public class HomeFragment extends Fragment implements OnMovieListener {
         Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
         MovieModel selectedMovie = null;
 
-
         //TODO: Fix this
         if(selectedMovie != null){
             intent.putExtra("movie", selectedMovie);
             startActivity(intent);
         }
-
-
-
-
     }
 
     @Override

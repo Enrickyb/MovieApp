@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.movieapp.models.MovieModel;
 import com.example.movieapp.repositories.MovieRepository;
+import com.example.movieapp.response.MovieSearchResponse;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class MovieListViewModel extends ViewModel {
     }
 
     public void searchMovieApiTrend(int pageNumber){
-        movieRepository.searchTrend(pageNumber);
+       movieRepository.searchTrend(pageNumber);
     }
 
     public void searchNextPage(){
