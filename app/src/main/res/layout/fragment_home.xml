@@ -48,17 +48,23 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
                     >
-                    <ImageView
-                    android:id="@+id/imageView_highlight"
-                    android:layout_width="match_parent"
-                    android:background="@drawable/shadow"
-                    android:src="@drawable/ic_launcher_background"
-                    app:tint="#86000000"
-                    app:tintMode="src_over"
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="360dp">
+                        <ImageView
+                            android:id="@+id/imageView_highlight"
+                            android:layout_width="match_parent"
+                            android:layout_height="360dp"
+                            android:scaleType="centerCrop"
+                            />
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/shadow" />
 
-                    android:layout_height="360dp"
-                    android:scaleType="centerCrop"
-                     />
+                    </FrameLayout>
+
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

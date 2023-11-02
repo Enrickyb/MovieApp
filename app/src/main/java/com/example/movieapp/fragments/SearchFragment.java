@@ -124,6 +124,8 @@ public class SearchFragment extends Fragment implements OnMovieListener {
         SearchView searchView = getView().findViewById(R.id.searchView);
 
 
+
+
         if (searchView != null) {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
