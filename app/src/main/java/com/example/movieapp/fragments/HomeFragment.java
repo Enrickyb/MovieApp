@@ -127,8 +127,20 @@ public class HomeFragment extends Fragment implements OnMovieListener {
                         Log.v("trend", "onChanged: " + movieModel.getTitle());
                     }
 
+                    Random rand = new Random();
+                    int pageRandom = rand.nextInt(movieModels.size());
 
-                    MovieModel randomMovie = movieModels.get(0);
+
+
+
+                    MovieModel randomMovie = movieModels.get(pageRandom);
+                    while (randomMovie.getBackdrop_path() == null && randomMovie.getBackdrop_path().isEmpty() && randomMovie.getTitle() == null && randomMovie.getTitle().isEmpty()){
+                        pageRandom = rand.nextInt(movieModels.size());
+                        randomMovie = movieModels.get(pageRandom);
+                    }
+
+
+                    Log.v("randomized movie", "onChanged: " + randomMovie.getTitle());
 
                     String imageUrl = "https://image.tmdb.org/t/p/w500" + randomMovie.getBackdrop_path();
                     Glide.with(getContext())
